@@ -6,10 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 import yt_dlp
 from dotenv import load_dotenv
 
-app = FastAPI()
-
+# Загружаем переменные окружения
 load_dotenv()
 
+# Инициализируем приложение
+app = FastAPI()
+
+# Настраиваем CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Для разработки — можно сузить позже
