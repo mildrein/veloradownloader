@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Velora</title>
+
+  <!-- FONT -->
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+</head>
+
+<body>
+
+  <!-- BACKGROUND -->
+
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <!-- MAIN -->
+
+  <div class="container">
+
+    <!-- NAVBAR -->
+
+    <nav>
+
+      <div class="logo">
+        Vel<span>ora</span>
+      </div>
+
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">API</a>
+        <a href="#">Pricing</a>
+        <a href="#">Docs</a>
+      </div>
+
+    </nav>
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+      <div class="hero-badge">
+        ⚡ Modern media downloader
+      </div>
+
+      <h1>
+        Save media instantly.
+        <br>
+        Minimal. Fast. Beautiful.
+      </h1>
+
+      <p>
+        Velora helps you download direct media files
+        with a beautiful SaaS-style experience.
+      </p>
+
+      <!-- DOWNLOAD WRAPPER -->
+
+      <div class="download-wrapper">
+
+        <div class="download-box">
+
+          <input
+            id="url"
+            type="text"
+            placeholder="Paste your media URL here..."
+          >
+
+          <button onclick="downloadMedia()">
+            Download
+          </button>
+
+        </div>
+
+        <div id="status"></div>
+
+      </div>
+
+      <!-- PLATFORMS -->
+
+      <div class="platforms">
+
+        <div class="platform">MP4</div>
+        <div class="platform">JPG</div>
+        <div class="platform">PNG</div>
+        <div class="platform">WEBP</div>
+
+      </div>
+
+    </section>
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+      <div class="card">
+
+        <div class="card-icon">
+          ⚡
+        </div>
+
+        <h3>
+          Ultra Fast
+        </h3>
+
+        <p>
+          Instant downloads with optimized backend performance.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-icon">
+          🔒
+        </div>
+
+        <h3>
+          Secure
+        </h3>
+
+        <p>
+          Safe and protected media processing.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-icon">
+          💎
+        </div>
+
+        <h3>
+          Minimal UI
+        </h3>
+
+        <p>
+          Clean modern interface inspired by modern SaaS products.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+      <div class="footer-logo">
+        Vel<span>ora</span>
+      </div>
+
+      <p>
+        © 2026 Velora. All rights reserved.
+      </p>
+
+    </footer>
+
+  </div>
+
+<!-- SCRIPT -->
+<script>
+async function downloadMedia() {
+    const input = document.getElementById("url");
+    const status = document.getElementById("status");
+    const button = document.querySelector("button");
+    const url = input.value.trim();
+
+    if (!url) {
+        status.innerText = "❌ Вставьте корректную ссылку";
+        status.style.color = "red";
+        return;
+    }
+
+    button.innerText = "⏳ Processing...";
+    button.disabled = true;
+    status.innerText = "🔄 Подключаемся к серверу...";
+    status.style.color = "orange";
+
+    try {
+        // Новый endpoint и параметры
+        const backendUrl = `http://localhost:8000/download?url=${encodeURIComponent(url)}&format=best`;
+        
+        const response = await fetch(backendUrl);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || "Ошибка сервера");
+        }
+
+        status.innerText = "📥 Скачивание началось...";
+        status.style.color = "green";
+
+        // Получаем файл
+        const blob = await response.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        // Автоматическое скачивание
+        const a = document.createElement("a");
+        a.href = objectUrl;
+        a.download = "velora-media.mp4";   // Можно улучшить название позже
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        URL.revokeObjectURL(objectUrl);
+
+        status.innerText = "✅ Скачивание завершено!";
+        status.style.color = "green";
+
+    } catch (err) {
+        console.error(err);
+        status.innerText = "❌ " + (err.message || "Ошибка соединения с сервером");
+        status.style.color = "red";
+    } finally {
+        button.innerText = "Download";
+        button.disabled = false;
+    }
+}
+</script>
+</body>
+</html>
+```
