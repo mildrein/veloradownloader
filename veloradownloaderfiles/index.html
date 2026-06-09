@@ -212,8 +212,7 @@ async function downloadMedia() {
 
     try {
         // Новый endpoint и параметры
-        const backendUrl = `http://localhost:8000/download?url=${encodeURIComponent(url)}&format=best`;
-        
+        const backendUrl = `https://veloradownloadermain-production.up.railway.app/download?url=${encodeURIComponent(url)}&format=best`;
         const response = await fetch(backendUrl);
 
         if (!response.ok) {
